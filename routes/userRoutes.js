@@ -8,7 +8,7 @@ import {
   getUsers,
   deleteUser,
   getUserById,
-  updateUser,
+  updateUser
 } from '../controllers/userController.js'
 import { protect, admin } from '../middleware/authMiddleWare.js'
 
