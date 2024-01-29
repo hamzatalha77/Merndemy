@@ -2,17 +2,20 @@
   "name": "mernydemy_backend",
   "version": "1.0.0",
   "description": "nothing",
-  "main": "server.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
+    "start": "node index.js",
     "build": "npm i",
-    "server": "nodemon server.js",
-    "vercel-build": "hamza talha deploy",
+    "server": "nodemon index.js",
+    "vercel-build": "echo hello",
     "data:import": "node seeder",
     "data:destroy": "node seeder -d"
   },
   "author": "",
+  "engines": {
+    "node": "20.10.0"
+  },
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
