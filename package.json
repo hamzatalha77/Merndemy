@@ -8,11 +8,9 @@
     "start": "node server.js",
     "build": "npm i",
     "server": "nodemon server.js",
-    "client": "npm start --prefix frontend",
-    "dev": "concurrently \" npm run server\" \"npm run client\"",
+    "vercel-build": "hamza talha deploy",
     "data:import": "node seeder",
-    "data:destroy": "node seeder -d",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+    "data:destroy": "node seeder -d"
   },
   "author": "",
   "license": "ISC",
