@@ -38,8 +38,10 @@ const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 if (process.env.NODE_ENV === 'production') {
-  app.get('/', (req, res) => {
-    res.send('API is running....')
+  app.get('/', (req, res, next) => {
+    const error = new Error('Not Found')
+    error.status = 404
+    next(error)
   })
 }
 
