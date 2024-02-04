@@ -38,18 +38,20 @@ app.use('/api/orders', orderRoutes)
 app.use('/api/upload', uploadRoutes)
 app.use('/api/wish', wishRoutes)
 
+app.get('/', (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    res.send('API is running....')
+  } else {
+    res.send('Development mode - API is running....')
+  }
+})
+
 app.get('/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 )
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
-
-if (process.env.NODE_ENV === 'production') {
-  app.get('/', (req, res) => {
-    res.send('API is running....')
-  })
-}
 
 app.use(notFound)
 app.use(errorHandler)
