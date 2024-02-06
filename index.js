@@ -33,12 +33,6 @@ app.use(
   })
 )
 
-app.use('/api/products', productRoutes)
-app.use('/api/users', userRoutes)
-app.use('/api/orders', orderRoutes)
-app.use('/api/upload', uploadRoutes)
-app.use('/api/wish', wishRoutes)
-
 app.get('/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 )
@@ -51,6 +45,14 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running....')
   })
 }
+app.get('/ping', (req, res) => {
+  res.send('PONG')
+})
+app.use('/api/products', productRoutes)
+app.use('/api/users', userRoutes)
+app.use('/api/orders', orderRoutes)
+app.use('/api/upload', uploadRoutes)
+app.use('/api/wish', wishRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
