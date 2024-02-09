@@ -18,4 +18,14 @@ const addWishItems = asyncHandler(async (req, res) => {
     })
   }
 })
-export { addWishItems }
+const removeWishItem = asyncHandler(async (req, res) => {
+  const wish = await Wish.findById(req.params.id)
+  if (wish) {
+    await Wish.remove()
+    res.status(202).json('This Product Has been Removed from your wish list')
+  } else {
+    res.status(204)
+    throw new Error('Item Not found')
+  }
+})
+export { addWishItems, removeWishItem }
