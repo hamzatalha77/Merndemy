@@ -4,5 +4,5 @@ import { addWishItems } from '../controllers/wishController.js'
 
 import { protect } from '../middleware/authMiddleWare.js'
 
-router.route('/').post(addWishItems)
+router.route('/').post(protect, addWishItems)
 export default router

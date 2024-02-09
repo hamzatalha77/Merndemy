@@ -8,15 +8,14 @@ const getProducts = asyncHandler(async (req, res) => {
     ? {
         name: {
           $regex: req.query.keyword,
-          $options: 'i',
-        },
+          $options: 'i'
+        }
       }
     : {}
   const count = await Product.countDocuments({ ...keyword })
   const products = await Product.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
-  // throw new Error('someError')
   res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 
@@ -52,9 +51,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
     throw new Error('product not found')
   }
 })
-const createProduct = asyncHandler(async (req, res, next) => {
+const createProduct = asyncHandler(async (req, res) => {
   try {
-    // console.log(req.body.images)
     const product = new Product({
       user: req.user._id,
       name: req.body.name,
@@ -63,7 +61,7 @@ const createProduct = asyncHandler(async (req, res, next) => {
       images: req.body.images,
       brand: req.body.brand,
       categories: req.body.categories,
-      countInStock: req.body.countInStock,
+      countInStock: req.body.countInStock
     })
 
     const createdProduct = await product.save()
@@ -113,7 +111,7 @@ const createProductReview = asyncHandler(async (req, res) => {
       name: req.user.name,
       rating: Number(rating),
       comment,
-      user: req.user._id,
+      user: req.user._id
     }
     product.reviews.push(review)
     product.numReviews = product.reviews.length
@@ -128,7 +126,7 @@ const createProductReview = asyncHandler(async (req, res) => {
     throw new Error('product Not Found')
   }
 })
-const getTopProducts = asyncHandler(async (req, res) => {
+const getTopProducts = asyncHandler(async (res) => {
   const products = await Product.find({}).sort({ rating: -1 }).limit(3)
 
   res.json(products)
@@ -140,5 +138,5 @@ export {
   createProduct,
   updateProduct,
   createProductReview,
-  getTopProducts,
+  getTopProducts
 }

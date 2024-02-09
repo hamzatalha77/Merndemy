@@ -10,8 +10,9 @@ import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
-import wishRoutes from './routes/wishListRoutes.js'
+import wishRoutes from './routes/wishRoutes.js'
 import cookieParser from 'cookie-parser'
+import bodyParser from 'body-parser'
 dotenv.config()
 
 connectDB()
@@ -23,6 +24,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(express.json())
+app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(

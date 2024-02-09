@@ -5,7 +5,7 @@ const wishSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: 'User',
+      ref: 'User'
     },
     wishItems: [
       {
@@ -15,13 +15,13 @@ const wishSchema = mongoose.Schema(
         product: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
-          ref: 'Product',
-        },
-      },
-    ],
+          ref: 'Product'
+        }
+      }
+    ]
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 )
 

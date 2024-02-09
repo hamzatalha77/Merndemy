@@ -1,19 +1,21 @@
 import asyncHandler from 'express-async-handler'
 import Wish from '../models/wishModel.js'
-
-const addWishItems = asyncHandler(async (res, req) => {
+const addWishItems = asyncHandler(async (req, res) => {
   const { wishItems } = req.body
-  if (wishItems && wishItems.length === 0) {
+  console.log(req.body)
+  if (!wishItems || wishItems.length === 0) {
     res.status(400)
     throw new Error('No WishList Items')
-    return
   } else {
     const wish = new Wish({
       wishItems,
-      user: req.user._id,
+      user: req.user._id
     })
-    const addWishItems = await wish.save()
-    res.status(201).json(addWishItems)
+    const addedWishItems = await wish.save()
+    res.status(201).json({
+      message: 'The Products have been added to your WishList',
+      addedWishItems
+    })
   }
 })
 export { addWishItems }
