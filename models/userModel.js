@@ -20,9 +20,7 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false
     },
-    wishList: [
-      { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' }
-    ]
+    wishList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]
   },
   { timestamps: true }
 )

@@ -135,15 +135,15 @@ const getTopProducts = asyncHandler(async (req, res) => {
 
 const addWishItems = asyncHandler(async (req, res) => {
   const { _id } = req.user
-  const { prodId } = req.body
+  const { productId } = req.body
   try {
     const user = await User.findById(_id)
-    const alreadyAdded = user.wishList.find((id) => id.toString() === prodId)
+    const alreadyAdded = user.wishList.find((id) => id.toString() === productId)
     if (alreadyAdded) {
       let user = await User.findByIdAndUpdate(
         _id,
         {
-          $pull: { wishList: prodId }
+          $pull: { wishList: productId }
         },
         {
           new: true
@@ -154,7 +154,7 @@ const addWishItems = asyncHandler(async (req, res) => {
       let user = await User.findByIdAndUpdate(
         _id,
         {
-          $push: { wishList: prodId }
+          $push: { wishList: productId }
         },
         {
           new: true
