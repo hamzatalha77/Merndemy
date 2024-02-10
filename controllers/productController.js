@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js'
+import User from '../models/userModel.js'
 
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 10
@@ -126,10 +127,44 @@ const createProductReview = asyncHandler(async (req, res) => {
     throw new Error('product Not Found')
   }
 })
-const getTopProducts = asyncHandler(async (res) => {
+const getTopProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({}).sort({ rating: -1 }).limit(3)
 
   res.json(products)
+})
+
+const addWishItems = asyncHandler(async (req, res) => {
+  const { _id } = req.user
+  const { prodId } = req.body
+  try {
+    const user = await User.findById(_id)
+    const alreadyAdded = user.wishList.find((id) => id.toString() === prodId)
+    if (alreadyAdded) {
+      let user = await User.findByIdAndUpdate(
+        _id,
+        {
+          $pull: { wishList: prodId }
+        },
+        {
+          new: true
+        }
+      )
+      res.json(user)
+    } else {
+      let user = await User.findByIdAndUpdate(
+        _id,
+        {
+          $push: { wishList: prodId }
+        },
+        {
+          new: true
+        }
+      )
+      res.json(user)
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
 })
 export {
   getProducts,
@@ -138,5 +173,6 @@ export {
   createProduct,
   updateProduct,
   createProductReview,
-  getTopProducts
+  getTopProducts,
+  addWishItems
 }
