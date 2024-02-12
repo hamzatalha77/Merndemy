@@ -12,6 +12,7 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      wishlist: user.wishlist,
       token: generateToken(user._id)
     })
   } else {
@@ -22,6 +23,8 @@ const authUser = asyncHandler(async (req, res) => {
 
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
+    .populate('wishlist') // Assuming 'wishlist' is a reference field in your User model
+    .select('-password')
   if (user) {
     res.json({
       _id: user._id,
