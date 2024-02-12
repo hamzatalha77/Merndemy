@@ -23,13 +23,14 @@ const authUser = asyncHandler(async (req, res) => {
 
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
-    .populate('wishlist') // Assuming 'wishlist' is a reference field in your User model
+    .populate('wishlist')
     .select('-password')
   if (user) {
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
+      wishlist: user.wishlist,
       isAdmin: user.isAdmin
     })
   } else {
@@ -59,6 +60,7 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      wishlist: user.wishlist,
       token: generateToken(user._id)
     })
   } else {
@@ -81,6 +83,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      wishlist: user.wishlist,
       isAdmin: updatedUser.isAdmin,
       token: generateToken(updatedUser._id)
     })
@@ -127,11 +130,45 @@ const updateUser = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      wishlist: user.wishlist,
       isAdmin: updatedUser.isAdmin
     })
   } else {
     res.status(401)
     throw new Error('User Not Found')
+  }
+})
+const addWishItems = asyncHandler(async (req, res) => {
+  const { _id } = req.user
+  const { productId } = req.body
+  try {
+    const user = await User.findById(_id)
+    const alreadyAdded = user.wishlist.find((id) => id.toString() === productId)
+    if (alreadyAdded) {
+      let user = await User.findByIdAndUpdate(
+        _id,
+        {
+          $pull: { wishlist: productId }
+        },
+        {
+          new: true
+        }
+      )
+      res.json(user)
+    } else {
+      let user = await User.findByIdAndUpdate(
+        _id,
+        {
+          $push: { wishlist: productId }
+        },
+        {
+          new: true
+        }
+      )
+      res.json(user)
+    }
+  } catch (error) {
+    throw new Error(error)
   }
 })
 export {
@@ -142,5 +179,6 @@ export {
   getUsers,
   deleteUser,
   getUserById,
-  updateUser
+  updateUser,
+  addWishItems
 }
