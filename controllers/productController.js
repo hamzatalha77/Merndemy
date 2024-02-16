@@ -20,19 +20,6 @@ const getProducts = asyncHandler(async (req, res) => {
   res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 
-// const getProductsWithCat = asyncHandler(async (req, res) => {
-//   let category = req.params.category
-
-//   const products = await Product.find({ category: category })
-
-//   res.json({ products })
-// })
-// const getProductsByCategory = asyncHandler(async (req, res) => {
-//   const categoryName = req.path.replace(/\//g, '').replace('category', '')
-//   const products = await Product.find({ category: categoryName })
-
-//   res.json(products)
-// })
 const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
   if (product) {
