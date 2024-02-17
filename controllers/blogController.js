@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler'
-
+import slugify from 'slugify'
 import Blog from '../models/blogModel.js'
 
 // const getProducts = asyncHandler(async (req, res) => {
@@ -41,47 +41,64 @@ import Blog from '../models/blogModel.js'
 // })
 const createBlog = asyncHandler(async (req, res) => {
   try {
+    const { title, images } = req.body
+
     const blog = new Blog({
-      title: req.body.title,
-      images: req.body.images
+      title,
+      images
     })
 
-    const createdBlog = await blog.save()
+    const slug = slugify(title, { lower: true })
+    blog.slug = slug
+
+    let createdBlog = await blog.save()
+
+    createdBlog = createdBlog.toObject()
+    createdBlog.createdAt = createdBlog.createdAt.toLocaleString()
+    createdBlog.updatedAt = createdBlog.updatedAt.toLocaleString()
+
     res.status(201).json(createdBlog)
   } catch (error) {
-    console.error(error) // Log the error for debugging
+    console.error(error)
     res.status(400).send(error.message)
   }
 })
 
-// const updateProduct = asyncHandler(async (req, res) => {
-//   const { name, price, description, image, brand, categories, countInStock } =
-//     req.body
+const updateBlog = asyncHandler(async (req, res) => {
+  const { title, images } = req.body
 
-//   const product = await Product.findById(req.params.id)
+  let blog = await Blog.findById(req.params.id)
 
-//   if (product) {
-//     product.name = name
-//     product.price = price
-//     product.description = description
-//     product.image = image
-//     product.brand = brand
-//     product.categories = categories
-//     product.countInStock = countInStock
+  if (blog) {
+    blog.title = title
 
-//     const updatedProduct = await product.save()
-//     res.json(updatedProduct)
-//   } else {
-//     res.status(404)
-//     throw new Error('product Not Found')
-//   }
-// })
+    if (images) {
+      blog.images = images
+    }
 
+    const slug = slugify(title, { lower: true })
+    blog.slug = slug
+
+    blog.updatedAt = new Date()
+
+    blog = await blog.save()
+
+    blog = blog.toObject()
+    blog.createdAt = blog.createdAt.toLocaleString()
+    blog.updatedAt = blog.updatedAt.toLocaleString()
+
+    res.json(blog)
+  } else {
+    res.status(404)
+    throw new Error('Blog Not Found')
+  }
+})
 export {
   //   getProducts,
   //   getProductById,
   //   deleteProduct,
   //   createProduct,
   //   updateProduct,
+  updateBlog,
   createBlog
 }

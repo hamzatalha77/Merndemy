@@ -5,7 +5,10 @@ const blogSchema = mongoose.Schema(
     title: {
       type: String
     },
-    images: [{ type: String }]
+    slug: {
+      type: String
+    },
+    images: [{ type: String, required: true }]
   },
   { timestamps: true }
 )
