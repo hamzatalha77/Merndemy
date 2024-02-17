@@ -2,43 +2,43 @@ import asyncHandler from 'express-async-handler'
 import slugify from 'slugify'
 import Blog from '../models/blogModel.js'
 
-// const getProducts = asyncHandler(async (req, res) => {
-//   const pageSize = 10
-//   const page = Number(req.query.pageNumber) || 1
-//   const keyword = req.query.keyword
-//     ? {
-//         name: {
-//           $regex: req.query.keyword,
-//           $options: 'i'
-//         }
-//       }
-//     : {}
-//   const count = await Product.countDocuments({ ...keyword })
-//   const products = await Product.find({ ...keyword })
-//     .limit(pageSize)
-//     .skip(pageSize * (page - 1))
-//   res.json({ products, page, pages: Math.ceil(count / pageSize) })
-// })
+const getBlogs = asyncHandler(async (req, res) => {
+  const pageSize = 10
+  const page = Number(req.query.pageNumber) || 1
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: 'i'
+        }
+      }
+    : {}
+  const count = await Blog.countDocuments({ ...keyword })
+  const blogs = await Blog.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+  res.json({ blogs, page, pages: Math.ceil(count / pageSize) })
+})
 
-// const getProductById = asyncHandler(async (req, res) => {
-//   const product = await Product.findById(req.params.id)
-//   if (product) {
-//     res.json(product)
-//   } else {
-//     res.status(404)
-//     throw new Error('product not found')
-//   }
-// })
-// const deleteProduct = asyncHandler(async (req, res) => {
-//   const product = await Product.findById(req.params.id)
-//   if (product) {
-//     await product.remove()
-//     res.json({ message: 'product remove' })
-//   } else {
-//     res.status(404)
-//     throw new Error('product not found')
-//   }
-// })
+const getBlogById = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id)
+  if (blog) {
+    res.json(blog)
+  } else {
+    res.status(404)
+    throw new Error('blog not found')
+  }
+})
+const deleteBlog = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id)
+  if (blog) {
+    await blog.remove()
+    res.json({ message: 'blog remove' })
+  } else {
+    res.status(404)
+    throw new Error('blog not found')
+  }
+})
 const createBlog = asyncHandler(async (req, res) => {
   try {
     const { title, images } = req.body
@@ -87,18 +87,10 @@ const updateBlog = asyncHandler(async (req, res) => {
     blog.createdAt = blog.createdAt.toLocaleString()
     blog.updatedAt = blog.updatedAt.toLocaleString()
 
-    res.json(blog)
+    res.json({ message: 'blog has been updated with success', blog })
   } else {
     res.status(404)
     throw new Error('Blog Not Found')
   }
 })
-export {
-  //   getProducts,
-  //   getProductById,
-  //   deleteProduct,
-  //   createProduct,
-  //   updateProduct,
-  updateBlog,
-  createBlog
-}
+export { updateBlog, createBlog, getBlogs, getBlogById, deleteBlog }
