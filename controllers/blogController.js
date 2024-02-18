@@ -33,7 +33,7 @@ const deleteBlog = asyncHandler(async (req, res) => {
   const blog = await Blog.findById(req.params.id)
   if (blog) {
     await blog.remove()
-    res.json({ message: 'blog remove' })
+    res.json({ message: 'blog has been removed' })
   } else {
     res.status(404)
     throw new Error('blog not found')
@@ -51,11 +51,7 @@ const createBlog = asyncHandler(async (req, res) => {
     const slug = slugify(title, { lower: true })
     blog.slug = slug
 
-    let createdBlog = await blog.save()
-
-    createdBlog = createdBlog.toObject()
-    createdBlog.createdAt = createdBlog.createdAt.toLocaleString()
-    createdBlog.updatedAt = createdBlog.updatedAt.toLocaleString()
+    const createdBlog = await blog.save()
 
     res.status(201).json(createdBlog)
   } catch (error) {
@@ -82,10 +78,6 @@ const updateBlog = asyncHandler(async (req, res) => {
     blog.updatedAt = new Date()
 
     blog = await blog.save()
-
-    blog = blog.toObject()
-    blog.createdAt = blog.createdAt.toLocaleString()
-    blog.updatedAt = blog.updatedAt.toLocaleString()
 
     res.json({ message: 'blog has been updated with success', blog })
   } else {

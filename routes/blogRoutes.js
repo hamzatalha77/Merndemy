@@ -9,7 +9,11 @@ import {
   getBlogs,
   updateBlog
 } from '../controllers/blogController.js'
-router.route('/').get(getBlogs).post(protect, createBlog)
-router.route('/:id').put(updateBlog).delete(deleteBlog).get(getBlogById)
+router.route('/').get(getBlogs).post(protect, admin, createBlog)
+router
+  .route('/:id')
+  .put(protect, admin, updateBlog)
+  .delete(protect, admin, deleteBlog)
+  .get(getBlogById)
 
 export default router
