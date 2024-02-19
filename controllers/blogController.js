@@ -44,6 +44,7 @@ const createBlog = asyncHandler(async (req, res) => {
     const { title, images } = req.body
 
     const blog = new Blog({
+      user: req.user._id,
       title,
       images
     })

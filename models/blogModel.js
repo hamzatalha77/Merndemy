@@ -2,7 +2,15 @@ import mongoose from 'mongoose'
 
 const blogSchema = mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    },
     title: {
+      type: String
+    },
+    description: {
       type: String
     },
     slug: {

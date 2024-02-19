@@ -6,6 +6,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    avatar: {
+      type: String,
+      default:
+        'http://res.cloudinary.com/deenyqw6o/image/upload/v1708340834/tzoqfjso837hbrubrdra.png'
+    },
     email: {
       type: String,
       required: true,
@@ -15,6 +20,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true
     },
+
     isAdmin: {
       type: Boolean,
       required: true,
