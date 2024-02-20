@@ -39,46 +39,71 @@ const deleteProduct = asyncHandler(async (req, res) => {
     throw new Error('product not found')
   }
 })
+
 const createProduct = asyncHandler(async (req, res) => {
   try {
+    const {
+      name,
+      images,
+      price,
+      description,
+      brand,
+      categories,
+      countInStock
+    } = req.body
+
     const product = new Product({
       user: req.user._id,
-      name: req.body.name,
-      price: req.body.price,
-      description: req.body.description,
-      images: req.body.images,
-      brand: req.body.brand,
-      categories: req.body.categories,
-      countInStock: req.body.countInStock
+      name,
+      price,
+      images,
+      description,
+      brand,
+      categories,
+      countInStock
     })
 
+    const slug = slugify(name, { lower: true })
+    product.slug = slug
+
     const createdProduct = await product.save()
+
     res.status(201).json(createdProduct)
   } catch (error) {
+    console.error(error)
     res.status(400).send(error.message)
   }
 })
 
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, categories, countInStock } =
+  const { name, images, price, description, brand, categories, countInStock } =
     req.body
 
-  const product = await Product.findById(req.params.id)
+  let product = await Product.findById(req.params.id)
 
   if (product) {
     product.name = name
     product.price = price
     product.description = description
-    product.image = image
     product.brand = brand
     product.categories = categories
     product.countInStock = countInStock
 
-    const updatedProduct = await product.save()
-    res.json(updatedProduct)
+    if (images) {
+      product.images = images
+    }
+
+    const slug = slugify(name, { lower: true })
+    product.slug = slug
+
+    product.updatedAt = new Date()
+
+    product = await product.save()
+
+    res.json({ message: 'product has been updated with success', product })
   } else {
     res.status(404)
-    throw new Error('product Not Found')
+    throw new Error('Product Not Found')
   }
 })
 

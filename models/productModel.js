@@ -24,17 +24,16 @@ const productSchema = mongoose.Schema(
     name: {
       type: String
     },
-    image: {
-      type: String
-    },
-    cloudinary_id: {
-      type: String
-    },
+    images: [{ type: String, required: true }],
+
     brand: {
       type: String
     },
     categories: { type: Array },
     description: {
+      type: String
+    },
+    slug: {
       type: String
     },
     reviews: [reviewSchema],
