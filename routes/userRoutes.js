@@ -13,8 +13,7 @@ import {
 import { protect, admin } from '../middleware/authMiddleWare.js'
 
 router.route('/').post(registerUser).get(protect, admin, getUsers)
-router.post('/login', authUser)
-
+router.route('/login').post(authUser)
 router
   .route('/profile')
   .get(protect, getUserProfile)

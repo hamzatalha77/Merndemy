@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-
+const { ObjectId } = mongoose.Schema
 const reviewSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -29,7 +29,11 @@ const productSchema = mongoose.Schema(
     brand: {
       type: String
     },
-    categories: { type: Array },
+    category: {
+      type: ObjectId,
+      ref: 'Category',
+      required: [true, 'Product must belong to a category']
+    },
     description: {
       type: String
     },

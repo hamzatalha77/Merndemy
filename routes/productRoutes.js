@@ -8,16 +8,16 @@ import {
   updateProduct,
   createProductReview,
   getTopProducts,
-  addWishItems
+  addWishItems,
+  productCategory
 } from '../controllers/productController.js'
 import { protect, admin } from '../middleware/authMiddleWare.js'
 router.route('/').get(getProducts).post(protect, admin, createProduct)
-
 router.route('/:id/reviews').post(protect, createProductReview)
-router.get('/top', getTopProducts)
+router.route('/top').get(getTopProducts)
+router.route('/wishlist').put(protect, addWishItems)
+router.route('/product/categories').get(productCategory)
 router
-  .put('/wishlist', protect, addWishItems)
-
   .route('/:id')
   .get(getProductById)
   .delete(protect, admin, deleteProduct)

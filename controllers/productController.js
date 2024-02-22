@@ -1,7 +1,9 @@
 import asyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js'
 import User from '../models/userModel.js'
+import Category from '../models/categoryModel.js'
 import slugify from 'slugify'
+import mongoose from 'mongoose'
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 10
   const page = Number(req.query.pageNumber) || 1
@@ -14,10 +16,31 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     : {}
   const count = await Product.countDocuments({ ...keyword })
-  const products = await Product.find({ ...keyword })
+  let ids = []
+  const categ = await Category.find({}, { _id: 1 })
+  categ.forEach((cat) => {
+    ids.push(cat._id)
+  })
+
+  //filter
+  let cat = req.query.cat
+  console.log('Category ID:', cat) // Debugging line
+  let query = {}
+  if (cat !== '') {
+    if (mongoose.Types.ObjectId.isValid(cat)) {
+      query = mongoose.Types.ObjectId(cat)
+    } else {
+      return res.status(400).json({ message: 'Invalid category ID' })
+    }
+  } else {
+    query = ids
+  }
+
+  const products = await Product.find({ ...keyword, category: query })
+    .populate('category', 'name')
     .limit(pageSize)
     .skip(pageSize * (page - 1))
-  res.json({ products, page, pages: Math.ceil(count / pageSize) })
+  res.status(201).json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 
 const getProductById = asyncHandler(async (req, res) => {
@@ -42,15 +65,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const createProduct = asyncHandler(async (req, res) => {
   try {
-    const {
-      name,
-      images,
-      price,
-      description,
-      brand,
-      categories,
-      countInStock
-    } = req.body
+    const { name, images, price, description, brand, category, countInStock } =
+      req.body
 
     const product = new Product({
       user: req.user._id,
@@ -59,7 +75,7 @@ const createProduct = asyncHandler(async (req, res) => {
       images,
       description,
       brand,
-      categories,
+      category,
       countInStock
     })
 
@@ -76,7 +92,7 @@ const createProduct = asyncHandler(async (req, res) => {
 })
 
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, images, price, description, brand, categories, countInStock } =
+  const { name, images, price, description, brand, category, countInStock } =
     req.body
 
   let product = await Product.findById(req.params.id)
@@ -86,7 +102,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.price = price
     product.description = description
     product.brand = brand
-    product.categories = categories
+    product.category = category
     product.countInStock = countInStock
 
     if (images) {
@@ -144,7 +160,20 @@ const getTopProducts = asyncHandler(async (req, res) => {
 
   res.json(products)
 })
-
+const productCategory = asyncHandler(async (req, res, next) => {
+  try {
+    const cat = await Product.find()
+      .populate('category', 'name')
+      .distinct('category')
+    res.status(201).json({
+      success: true,
+      cat
+    })
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+})
 const addWishItems = asyncHandler(async (req, res) => {
   const { _id } = req.user
   const { productId } = req.body
@@ -186,5 +215,6 @@ export {
   updateProduct,
   createProductReview,
   getTopProducts,
+  productCategory,
   addWishItems
 }

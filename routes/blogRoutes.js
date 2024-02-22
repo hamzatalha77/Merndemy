@@ -1,6 +1,5 @@
 import express from 'express'
 const router = express.Router()
-
 import { protect, admin } from '../middleware/authMiddleWare.js'
 import {
   createBlog,
@@ -9,6 +8,7 @@ import {
   getBlogs,
   updateBlog
 } from '../controllers/blogController.js'
+
 router.route('/').get(getBlogs).post(protect, admin, createBlog)
 router
   .route('/:id')
