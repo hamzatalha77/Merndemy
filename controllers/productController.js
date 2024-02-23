@@ -8,41 +8,35 @@ const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 10
   const page = Number(req.query.pageNumber) || 1
   const keyword = req.query.keyword
-    ? {
-        name: {
-          $regex: req.query.keyword,
-          $options: 'i'
-        }
-      }
+    ? { name: { $regex: req.query.keyword, $options: 'i' } }
     : {}
-  const count = await Product.countDocuments({ ...keyword })
-  let ids = []
-  const categ = await Category.find({}, { _id: 1 })
-  categ.forEach((cat) => {
-    ids.push(cat._id)
-  })
 
-  //filter
-  let cat = req.query.cat
-  console.log('Category ID:', cat) // Debugging line
   let query = {}
-  if (cat !== '') {
-    if (mongoose.Types.ObjectId.isValid(cat)) {
-      query = mongoose.Types.ObjectId(cat)
-    } else {
+
+  if (req.query.cat && req.query.cat !== '') {
+    const categoryId = req.query.cat
+
+    if (!mongoose.Types.ObjectId.isValid(categoryId)) {
       return res.status(400).json({ message: 'Invalid category ID' })
     }
-  } else {
-    query = ids
+
+    query.category = categoryId
   }
 
-  const products = await Product.find({ ...keyword, category: query })
-    .populate('category', 'name')
-    .limit(pageSize)
-    .skip(pageSize * (page - 1))
-  res.status(201).json({ products, page, pages: Math.ceil(count / pageSize) })
-})
+  try {
+    const products = await Product.find({ ...keyword, ...query })
+      .populate('category', 'name')
+      .limit(pageSize)
+      .skip(pageSize * (page - 1))
 
+    const count = await Product.countDocuments({ ...keyword, ...query })
+
+    res.status(200).json({ products, page, pages: Math.ceil(count / pageSize) })
+  } catch (error) {
+    console.error('Error fetching products:', error)
+    res.status(500).json({ message: 'Internal Server Error' })
+  }
+})
 const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
   if (product) {
