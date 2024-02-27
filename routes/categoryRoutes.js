@@ -6,7 +6,7 @@ import {
 } from '../controllers/categoryController.js'
 import { admin, protect } from '../middleware/authMiddleWare.js'
 
-router.route('/category/all').get(protect, getCategories)
+router.route('/category/all').get(getCategories)
 router.route('/category/create').post(protect, admin, createCategory)
 
 export default router
