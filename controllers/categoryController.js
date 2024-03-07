@@ -14,7 +14,7 @@ const createCategory = asyncHandler(async (req, res, next) => {
   }
 })
 
-//get all caregories
+
 const getCategories = asyncHandler(async (req, res, next) => {
   try {
     const categories = await Category.find()

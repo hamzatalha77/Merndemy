@@ -23,6 +23,19 @@ const getProducts = asyncHandler(async (req, res) => {
     query.category = categoryId
   }
 
+  // Add price range filter if provided
+  if (req.query.minPrice && req.query.maxPrice) {
+    const minPrice = Number(req.query.minPrice)
+    const maxPrice = Number(req.query.maxPrice)
+    query.price = { $gte: minPrice, $lte: maxPrice }
+  } else if (req.query.minPrice) {
+    const minPrice = Number(req.query.minPrice)
+    query.price = { $gte: minPrice }
+  } else if (req.query.maxPrice) {
+    const maxPrice = Number(req.query.maxPrice)
+    query.price = { $lte: maxPrice }
+  }
+
   try {
     const products = await Product.find({ ...keyword, ...query })
       .populate('category', 'name')
@@ -37,6 +50,7 @@ const getProducts = asyncHandler(async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' })
   }
 })
+
 const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
   if (product) {
