@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler'
-import SubCategory from '../models/subCategoryModel'
+import SubCategory from '../models/subCategoryModel.js'
 
 const getSubCategories = asyncHandler(async (req, res, next) => {
   try {

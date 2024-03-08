@@ -71,8 +71,16 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const createProduct = asyncHandler(async (req, res) => {
   try {
-    const { name, images, price, description, brand, category, countInStock } =
-      req.body
+    const {
+      name,
+      images,
+      price,
+      description,
+      brand,
+      category,
+      countInStock,
+      subCategory
+    } = req.body
 
     const product = new Product({
       user: req.user._id,
@@ -82,6 +90,7 @@ const createProduct = asyncHandler(async (req, res) => {
       description,
       brand,
       category,
+      subCategory,
       countInStock
     })
 
@@ -98,8 +107,16 @@ const createProduct = asyncHandler(async (req, res) => {
 })
 
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, images, price, description, brand, category, countInStock } =
-    req.body
+  const {
+    name,
+    images,
+    price,
+    description,
+    brand,
+    category,
+    countInStock,
+    SubCategory
+  } = req.body
 
   let product = await Product.findById(req.params.id)
 
@@ -109,6 +126,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.description = description
     product.brand = brand
     product.category = category
+    product.SubCategory = SubCategory
     product.countInStock = countInStock
 
     if (images) {
