@@ -13,6 +13,21 @@ const getSubCategories = asyncHandler(async (req, res, next) => {
     next(error)
   }
 })
+const getSubCategoriesByCategory = asyncHandler(async (req, res, next) => {
+  try {
+    const categoryId = req.params.categoryId
+    const subCategories = await SubCategory.find({ category: categoryId })
+
+    res.status(200).json({
+      success: true,
+      subCategories: subCategories
+    })
+  } catch (error) {
+    console.error(error)
+    next(error)
+  }
+})
+
 const createSubCategory = asyncHandler(async (req, res, next) => {
   try {
     const subCategory = await SubCategory.create(req.body)
@@ -26,4 +41,4 @@ const createSubCategory = asyncHandler(async (req, res, next) => {
   }
 })
 
-export { getSubCategories, createSubCategory }
+export { getSubCategories, createSubCategory, getSubCategoriesByCategory }

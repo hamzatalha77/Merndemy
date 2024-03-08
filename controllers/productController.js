@@ -4,7 +4,7 @@ import User from '../models/userModel.js'
 import slugify from 'slugify'
 import mongoose from 'mongoose'
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 10
+  const pageSize = 30
   const page = Number(req.query.pageNumber) || 1
   const keyword = req.query.keyword
     ? { name: { $regex: req.query.keyword, $options: 'i' } }
