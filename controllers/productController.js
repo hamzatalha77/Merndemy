@@ -1,7 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js'
 import User from '../models/userModel.js'
-import Category from '../models/categoryModel.js'
 import slugify from 'slugify'
 import mongoose from 'mongoose'
 const getProducts = asyncHandler(async (req, res) => {
@@ -23,7 +22,6 @@ const getProducts = asyncHandler(async (req, res) => {
     query.category = categoryId
   }
 
-  // Add price range filter if provided
   if (req.query.minPrice && req.query.maxPrice) {
     const minPrice = Number(req.query.minPrice)
     const maxPrice = Number(req.query.maxPrice)

@@ -9,6 +9,7 @@ import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import blogRoutes from './routes/blogRoutes.js'
+import subCategoryRoutes from './routes/subCategoryRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
@@ -48,7 +49,7 @@ app.use('/api/categories', categoryRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/blogs', blogRoutes)
-
+app.use('/api/SubCategories', subCategoryRoutes)
 app.use(notFound)
 app.use(errorHandler)
 
