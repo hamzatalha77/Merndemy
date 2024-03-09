@@ -4,7 +4,7 @@ import User from '../models/userModel.js'
 import slugify from 'slugify'
 import mongoose from 'mongoose'
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 30
+  const pageSize = 9
   const page = Number(req.query.pageNumber) || 1
   const keyword = req.query.keyword
     ? { name: { $regex: req.query.keyword, $options: 'i' } }
@@ -12,14 +12,24 @@ const getProducts = asyncHandler(async (req, res) => {
 
   let query = {}
 
-  if (req.query.cat && req.query.cat !== '') {
-    const categoryId = req.query.cat
+  if (req.query.category && req.query.category !== '') {
+    const categoryId = req.query.category
 
     if (!mongoose.Types.ObjectId.isValid(categoryId)) {
       return res.status(400).json({ message: 'Invalid category ID' })
     }
 
     query.category = categoryId
+  }
+
+  if (req.query.subCategory && req.query.subCategory !== '') {
+    const subCategoryId = req.query.subCategory
+
+    if (!mongoose.Types.ObjectId.isValid(subCategoryId)) {
+      return res.status(400).json({ message: 'Invalid subcategory ID' })
+    }
+
+    query.subCategory = subCategoryId
   }
 
   if (req.query.minPrice && req.query.maxPrice) {
@@ -36,7 +46,8 @@ const getProducts = asyncHandler(async (req, res) => {
 
   try {
     const products = await Product.find({ ...keyword, ...query })
-      .populate('category', 'name')
+      .populate('category', 'category_name')
+      .populate('subCategory', 'subCategory_name')
       .limit(pageSize)
       .skip(pageSize * (page - 1))
 
@@ -78,8 +89,8 @@ const createProduct = asyncHandler(async (req, res) => {
       description,
       brand,
       category,
-      countInStock,
-      subCategory
+      subCategory,
+      countInStock
     } = req.body
 
     const product = new Product({
@@ -115,7 +126,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     brand,
     category,
     countInStock,
-    SubCategory
+    subCategory
   } = req.body
 
   let product = await Product.findById(req.params.id)
@@ -126,7 +137,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.description = description
     product.brand = brand
     product.category = category
-    product.SubCategory = SubCategory
+    product.subCategory = subCategory
     product.countInStock = countInStock
 
     if (images) {

@@ -37,7 +37,7 @@ const productSchema = mongoose.Schema(
     subCategory: {
       type: ObjectId,
       ref: 'SubCategory',
-      required: [true, 'Product must belong to a SubCategory']
+      required: [true, 'Product must belong to a subCategory']
     },
     description: {
       type: String
