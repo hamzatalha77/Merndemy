@@ -50,18 +50,15 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id)
 
   if (order) {
-    // Update countInStock for each ordered product
     for (const item of order.orderItems) {
       const product = await Product.findById(item.product)
 
       if (product) {
-        // Reduce countInStock by the quantity ordered
         product.countInStock -= item.qty
         await product.save()
       }
     }
 
-    // Update order status and payment details
     order.isPaid = true
     order.paidAt = Date.now()
     order.paymentResult = {
