@@ -79,7 +79,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       user.password = req.body.password
     }
     if (req.body.avatar) {
-      user.avatar = req.body.avatar // Update avatar if provided in request
+      user.avatar = req.body.avatar
     }
 
     const updatedUser = await user.save()
@@ -87,8 +87,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
-      avatar: updatedUser.avatar, // Include avatar in the response
-      wishlist: updatedUser.wishlist, // Use updatedUser instead of user
+      avatar: updatedUser.avatar,
+      wishlist: updatedUser.wishlist,
       isAdmin: updatedUser.isAdmin,
       token: generateToken(updatedUser._id)
     })
