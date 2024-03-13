@@ -91,6 +91,16 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
     throw new Error('Order Not Found')
   }
 })
+const deleteOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id)
+  if (order) {
+    await Order.remove()
+    res.json({ message: 'order has been removed' })
+  } else {
+    res.status(404)
+    throw new Error('order not found')
+  }
+})
 const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id })
   res.json(orders)
@@ -105,5 +115,6 @@ export {
   updateOrderToPaid,
   updateOrderToDelivered,
   getMyOrders,
-  getOrders
+  getOrders,
+  deleteOrder
 }
