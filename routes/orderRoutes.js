@@ -12,6 +12,7 @@ import {
 import { protect, admin } from '../middleware/authMiddleWare.js'
 
 router.route('/').post(protect, addOrderItems).get(protect, admin, getOrders)
+router.route('/:id').delete(protect, admin, deleteOrder)
 router.route('/myorders').get(protect, getMyOrders)
 router.route('/myorders/:id').delete(protect, deleteOrder)
 router.route('/:id').get(protect, getOrderById)
