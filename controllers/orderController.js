@@ -94,7 +94,7 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 const deleteOrder = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id)
   if (order) {
-    await Order.remove()
+    await order.remove()
     res.json({ message: 'order has been removed' })
   } else {
     res.status(404)
