@@ -13,10 +13,15 @@ import subCategoryRoutes from './routes/subCategoryRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
+import http from 'http'
+const app = express()
+
+const server = http.createServer(app)
+import { Server } from 'socket.io'
+const io = new Server(server)
 
 dotenv.config()
 connectDB()
-const app = express()
 
 app.use(express.json())
 app.use(bodyParser.json())
@@ -55,7 +60,18 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT || 5001
 
-app.listen(
+// app.listen(
+//   PORT,
+//   console.log(
+//     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+//   )
+// )
+
+io.on('connection', (socket) => {
+  console.log('a user connected', socket.id)
+})
+
+server.listen(
   PORT,
   console.log(
     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
