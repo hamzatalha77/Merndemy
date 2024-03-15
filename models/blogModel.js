@@ -16,7 +16,18 @@ const blogSchema = mongoose.Schema(
     slug: {
       type: String
     },
-    images: [{ type: String, required: true }]
+    images: [{ type: String, required: true }],
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    comments: [
+      {
+        text: String,
+        create: { type: Date, default: Date.now },
+        postedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+        }
+      }
+    ]
   },
   { timestamps: true }
 )

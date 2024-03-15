@@ -41,7 +41,7 @@ const deleteBlog = asyncHandler(async (req, res) => {
 })
 const createBlog = asyncHandler(async (req, res) => {
   try {
-    const { title, images } = req.body
+    const { title, images, likes, comments } = req.body
 
     const blog = new Blog({
       user: req.user._id,
@@ -86,4 +86,66 @@ const updateBlog = asyncHandler(async (req, res) => {
     throw new Error('Blog Not Found')
   }
 })
-export { updateBlog, createBlog, getBlogs, getBlogById, deleteBlog }
+
+const addComment = asyncHandler(async (req, res, next) => {
+  const { comment } = req.body
+  try {
+    const blog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { comments: { text: comment, postedBy: req.user._id } }
+      },
+      { new: true }
+    )
+    res.status(200).json({
+      success: true,
+      post
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+const addLike = asyncHandler(async (req, res, next) => {
+  try {
+    const blog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      {
+        $addToSet: { likes: req.user._id }
+      },
+      { new: true }
+    )
+    res.status(200).json({
+      success: true,
+      post
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+const removeLike = asyncHandler(async (req, res, next) => {
+  try {
+    const blog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: { likes: req.user._id }
+      },
+      { new: true }
+    )
+    res.status(200).json({
+      success: true,
+      post
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+export {
+  updateBlog,
+  createBlog,
+  getBlogs,
+  getBlogById,
+  deleteBlog,
+  addComment,
+  addLike,
+  removeLike
+}
