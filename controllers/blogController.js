@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import slugify from 'slugify'
 import Blog from '../models/blogModel.js'
+import { io } from '../index.js'
 
 const getBlogs = asyncHandler(async (req, res) => {
   const pageSize = 10
@@ -92,15 +93,20 @@ const updateBlog = asyncHandler(async (req, res) => {
 const addComment = asyncHandler(async (req, res, next) => {
   const { comment } = req.body
   try {
-    const blog = await Blog.findByIdAndUpdate(
+    const blogComment = await Blog.findByIdAndUpdate(
       req.params.id,
       {
         $push: { comments: { text: comment, postedBy: req.user._id } }
       },
       { new: true }
     )
+    const blog = await Blog.findById(blogComment._id).populate(
+      'comments.postedBy',
+      'name email'
+    )
     res.status(200).json({
       success: true,
+      blogComment,
       blog
     })
   } catch (error) {
@@ -116,9 +122,14 @@ const addLike = asyncHandler(async (req, res, next) => {
       },
       { new: true }
     )
+    const blogs = await Blog.find()
+      .sort({ createdAt: -1 })
+      .populate('postedBy', 'name')
+    main.io.emit('add-like', blogs)
     res.status(200).json({
       success: true,
-      blog
+      blog,
+      blogs
     })
   } catch (error) {
     next(error)
@@ -133,9 +144,14 @@ const removeLike = asyncHandler(async (req, res, next) => {
       },
       { new: true }
     )
+    const blogs = await Blog.find()
+      .sort({ createdAt: -1 })
+      .populate('postedBy', 'name')
+    main.io.emit('remove-like', blogs)
     res.status(200).json({
       success: true,
-      blog
+      blog,
+      blogs
     })
   } catch (error) {
     next(error)

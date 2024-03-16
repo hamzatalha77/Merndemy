@@ -68,9 +68,11 @@ const PORT = process.env.PORT || 5001
 // )
 
 io.on('connection', (socket) => {
-  console.log('a user connected', socket.id)
+  socket.on('comment', (msg) => {
+    io.emit('new-comment', msg)
+  })
 })
-
+export { io }
 server.listen(
   PORT,
   console.log(
