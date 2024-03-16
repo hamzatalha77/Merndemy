@@ -41,11 +41,12 @@ const deleteBlog = asyncHandler(async (req, res) => {
 })
 const createBlog = asyncHandler(async (req, res) => {
   try {
-    const { title, images, likes, comments } = req.body
+    const { title, images, content, likes, comments } = req.body
 
     const blog = new Blog({
-      user: req.user._id,
+      postedBy: req.user._id,
       title,
+      content,
       images
     })
 
@@ -62,12 +63,13 @@ const createBlog = asyncHandler(async (req, res) => {
 })
 
 const updateBlog = asyncHandler(async (req, res) => {
-  const { title, images } = req.body
+  const { title, images, content } = req.body
 
   let blog = await Blog.findById(req.params.id)
 
   if (blog) {
     blog.title = title
+    blog.content = content
 
     if (images) {
       blog.images = images
@@ -99,7 +101,7 @@ const addComment = asyncHandler(async (req, res, next) => {
     )
     res.status(200).json({
       success: true,
-      post
+      blog
     })
   } catch (error) {
     next(error)
@@ -116,7 +118,7 @@ const addLike = asyncHandler(async (req, res, next) => {
     )
     res.status(200).json({
       success: true,
-      post
+      blog
     })
   } catch (error) {
     next(error)
@@ -133,7 +135,7 @@ const removeLike = asyncHandler(async (req, res, next) => {
     )
     res.status(200).json({
       success: true,
-      post
+      blog
     })
   } catch (error) {
     next(error)

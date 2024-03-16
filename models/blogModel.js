@@ -2,16 +2,18 @@ import mongoose from 'mongoose'
 
 const blogSchema = mongoose.Schema(
   {
-    user: {
+    postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User'
     },
     title: {
-      type: String
+      type: String,
+      required: true
     },
-    description: {
-      type: String
+    content: {
+      type: String,
+      required: true
     },
     slug: {
       type: String
@@ -21,7 +23,7 @@ const blogSchema = mongoose.Schema(
     comments: [
       {
         text: String,
-        create: { type: Date, default: Date.now },
+        created: { type: Date, default: Date.now },
         postedBy: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User'
