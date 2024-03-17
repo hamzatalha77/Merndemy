@@ -27,14 +27,14 @@ app.use(express.json())
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
-app.use(
-  cors({
-    origin: ['https://merndemy-backend.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    credentials: true
-  })
-)
-
+// app.use(
+//   cors({
+//     origin: ['https://merndemy-backend.vercel.app'],
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+//     credentials: true
+//   })
+// )
+app.use(cors())
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('dev'))
 }
@@ -68,10 +68,18 @@ const PORT = process.env.PORT || 5001
 // )
 
 io.on('connection', (socket) => {
-  socket.on('comment', (msg) => {
-    io.emit('new-comment', msg)
+  console.log('New client connected')
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected')
+  })
+
+  socket.on('addComment', (comment) => {
+    // Process the comment and emit it to all clients
+    io.emit('newComment', comment)
   })
 })
+
 export { io }
 server.listen(
   PORT,
