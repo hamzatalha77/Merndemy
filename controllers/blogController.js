@@ -99,10 +99,10 @@ const addComment = asyncHandler(async (req, res, next) => {
         $push: { comments: { text: comment, postedBy: req.user._id } }
       },
       { new: true }
-    )
+    ).populate('comments.postedBy', 'name email avatar')
     const blog = await Blog.findById(blogComment._id).populate(
       'comments.postedBy',
-      'name email'
+      'name email avatar'
     )
     res.status(200).json({
       success: true,
@@ -113,6 +113,7 @@ const addComment = asyncHandler(async (req, res, next) => {
     next(error)
   }
 })
+
 const addLike = asyncHandler(async (req, res, next) => {
   try {
     const blog = await Blog.findByIdAndUpdate(
