@@ -102,7 +102,7 @@ const addComment = asyncHandler(async (req, res, next) => {
     )
     const blog = await Blog.findById(blogComment._id).populate(
       'comments.postedBy',
-      'name email avatar'
+      'name email'
     )
     res.status(200).json({
       success: true,
