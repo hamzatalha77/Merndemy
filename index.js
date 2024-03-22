@@ -75,7 +75,6 @@ io.on('connection', (socket) => {
   })
 
   socket.on('addComment', (comment) => {
-    // Process the comment and emit it to all clients
     io.emit('newComment', comment)
   })
 })
