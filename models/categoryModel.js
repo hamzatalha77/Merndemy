@@ -6,6 +6,15 @@ const categorySchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: [true, 'Please add a category Name']
+    },
+    slugCategory: {
+      type: String,
+      unique: true,
+      required: true
+    },
+    imageCategory: {
+      type: String,
+      required: [true, 'Please add a category Image']
     }
   },
   { timestamps: true }
