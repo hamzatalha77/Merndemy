@@ -13,40 +13,35 @@ const getCategories = asyncHandler(async (req, res, next) => {
     next(error)
   }
 })
-const createCategory = asyncHandler(async (req, res) => {
+const createNewCategory = asyncHandler(async (req, res) => {
   try {
-    const { category_name, image, subCategory } = req.body
+    const { category_name, imageCategory } = req.body
 
-    const product = new Category({
+    const category = new Category({
       category_name,
-      image,
-      subCategory
+      imageCategory
     })
 
-    const slug = slugify(category_name, { lower: true })
-    product.slug = slug
+    const slugCategory = slugify(category_name, { lower: true })
+    category.slugCategory = slugCategory
 
-    const category = await Category.save()
+    const createCategory = await category.save()
 
-    res.status(201).json(category)
+    res.status(201).json(createCategory)
   } catch (error) {
     console.error(error)
     res.status(400).send(error.message)
   }
 })
-// const createCategory = asyncHandler(async (req, res, next) => {
-//   try {
-//     const slug = slugify(name, { lower: true })
-//     category.slug = slug
-//     const category = await Category.create(req.body)
-//     res.status(201).json({
-//       success: true,
-//       category
-//     })
-//   } catch (error) {
-//     console.log(error)
-//     next(error)
-//   }
-// })
+const deleteCategory = asyncHandler(async (req, res) => {
+  const category = await Category.findById(req.params.id)
+  if (category) {
+    await category.remove()
+    res.json({ message: 'category has been removed' })
+  } else {
+    res.status(404)
+    throw new Error('category not found')
+  }
+})
 
-export { createCategory, getCategories }
+export { createNewCategory, getCategories, deleteCategory }

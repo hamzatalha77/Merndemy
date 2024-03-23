@@ -12,10 +12,13 @@ const subCategorySchema = new mongoose.Schema(
       trim: true,
       required: [true, 'Please add a SubCategory Name']
     },
+    imageSubCategory: {
+      type: String,
+      required: [true, 'Please add a SubCategory Image']
+    },
     slugSubCategory: {
       type: String,
-      unique: true,
-      required: true
+      unique: true
     }
   },
   { timestamps: true }

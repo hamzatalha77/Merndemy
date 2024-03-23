@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import SubCategory from '../models/subCategoryModel.js'
-
+import slugify from 'slugify'
 const getSubCategories = asyncHandler(async (req, res, next) => {
   try {
     const subCategories = await SubCategory.find()
@@ -28,17 +28,25 @@ const getSubCategoriesByCategory = asyncHandler(async (req, res, next) => {
   }
 })
 
-const createSubCategory = asyncHandler(async (req, res, next) => {
+const createNewSubCategory = asyncHandler(async (req, res) => {
   try {
-    const subCategory = await SubCategory.create(req.body)
-    res.status(201).json({
-      success: true,
-      subCategory
+    const { category, subCategory_name, imageSubCategory } = req.body
+
+    const subCategory = new SubCategory({
+      category,
+      subCategory_name,
+      imageSubCategory
     })
+
+    const slugSubCategory = slugify(subCategory_name, { lower: true })
+    subCategory.slugSubCategory = slugSubCategory
+
+    const createSubCategory = await subCategory.save()
+
+    res.status(201).json(createSubCategory)
   } catch (error) {
-    console.log(error)
-    next(error)
+    console.error(error)
+    res.status(400).send(error.message)
   }
 })
-
-export { getSubCategories, createSubCategory, getSubCategoriesByCategory }
+export { getSubCategories, createNewSubCategory, getSubCategoriesByCategory }
