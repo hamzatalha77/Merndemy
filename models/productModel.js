@@ -43,7 +43,9 @@ const productSchema = mongoose.Schema(
       type: String
     },
     slug: {
-      type: String
+      type: String,
+      unique: true,
+      required: true
     },
     reviews: [reviewSchema],
     rating: {
