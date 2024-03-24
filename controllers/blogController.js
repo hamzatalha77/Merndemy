@@ -51,8 +51,8 @@ const createBlog = asyncHandler(async (req, res) => {
       images
     })
 
-    const slug = slugify(title, { lower: true })
-    blog.slug = slug
+    const blogSlug = slugify(title, { lower: true })
+    blog.blogSlug = blogSlug
 
     const createdBlog = await blog.save()
 
@@ -76,8 +76,8 @@ const updateBlog = asyncHandler(async (req, res) => {
       blog.images = images
     }
 
-    const slug = slugify(title, { lower: true })
-    blog.slug = slug
+    const blogSlug = slugify(title, { lower: true })
+    blog.blogSlug = blogSlug
 
     blog.updatedAt = new Date()
 

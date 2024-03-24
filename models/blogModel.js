@@ -15,8 +15,9 @@ const blogSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    slug: {
-      type: String
+    blogSlug: {
+      type: String,
+      unique: true
     },
     images: [{ type: String, required: true }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
