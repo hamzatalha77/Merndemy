@@ -11,6 +11,7 @@ import orderRoutes from './routes/orderRoutes.js'
 import blogRoutes from './routes/blogRoutes.js'
 import subCategoryRoutes from './routes/subCategoryRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js'
+import couponRoutes from './routes/couponRoutes.js'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import http from 'http'
@@ -55,6 +56,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/blogs', blogRoutes)
 app.use('/api/SubCategories', subCategoryRoutes)
+app.use('/api/coupons', couponRoutes)
 app.use(notFound)
 app.use(errorHandler)
 
