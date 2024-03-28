@@ -1,21 +1,23 @@
 import mongoose from 'mongoose'
 
 const couponSchema = mongoose.Schema({
-  name: {
+  startDate: Date,
+  endDate: Date,
+  thresholdAmount: Number,
+  type: {
     type: String,
-    required: true,
-    unique: true,
-    uppercase: true
-  },
-  expiry: {
-    type: Date,
     required: true
   },
-  discount: {
+  value: {
     type: Number,
     required: true
+  },
+  code: {
+    type: String,
+    required: true,
+    unique: true
   }
 })
 
-const Coupon = mongoose.model('Coupon', couponSchema)
-export default Coupon
+const coupon = mongoose.model('Coupon', couponSchema)
+export default coupon
