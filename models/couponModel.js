@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
 
 const couponSchema = mongoose.Schema({
-  startDate: Date,
-  endDate: Date,
-  thresholdAmount: Number,
+  startDate: { type: Date },
+  endDate: { type: Date },
+  thresholdAmount: { type: Number },
   type: {
     type: String,
     required: true
