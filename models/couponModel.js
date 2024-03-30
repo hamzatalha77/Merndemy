@@ -4,11 +4,12 @@ const couponSchema = mongoose.Schema({
   startDate: { type: Date },
   endDate: { type: Date },
   thresholdAmount: { type: Number },
-  type: {
-    type: String,
-    required: true
+  isActive: {
+    type: Boolean,
+    required: true,
+    default: true
   },
-  value: {
+  percent: {
     type: Number,
     required: true
   },

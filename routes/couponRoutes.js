@@ -1,17 +1,16 @@
 import express from 'express'
 const router = express.Router()
 import {
+  applyCoupon,
   createCoupon,
   deleteCoupon,
   getAllCoupons,
   updateCoupon
 } from '../controllers/couponController.js'
 import { admin, protect } from '../middleware/authMiddleWare.js'
-import verifyCoupon from '../controllers/verifyCoupon.js'
 
-router.post('/verifyCoupon', async (req, res) => {
-  res.send(await verifyCoupon(req.body))
-})
+router.route('/applyCoupon').post(protect, applyCoupon)
+
 router
   .route('/')
   .post(protect, admin, createCoupon)
