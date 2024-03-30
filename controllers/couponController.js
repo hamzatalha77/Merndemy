@@ -68,23 +68,26 @@ const deleteCoupon = asyncHandler(async (req, res, next) => {
 })
 
 const applyCoupon = asyncHandler(async (req, res) => {
-  const { _id } = req.user
+  // const { _id } = req.user
   const { code } = req.body
   if (!code) {
     throw new Error('Coupon code is required')
   }
-  const user = await User.findOne({ _id })
-  const Coupon = await Coupon.findOne({ code })
+  // const user = await User.findOne({ _id })
+  const foundCoupon = await Coupon.findOne({ code }) // Rename variable to avoid conflict
 
-  if (!Coupon) {
+  if (!foundCoupon) {
     throw new Error('Invalid coupon code')
   }
-  if (!Coupon.isActive) {
+  if (!foundCoupon.isActive) {
     throw new Error('This coupon is no longer available')
   }
 
   const currentDate = new Date()
-  if (Coupon.startDate > currentDate || Coupon.endDate < currentDate) {
+  if (
+    foundCoupon.startDate > currentDate ||
+    foundCoupon.endDate < currentDate
+  ) {
     throw new Error('This coupon is not valid at the moment')
   }
   res.status(200).json({ message: 'Coupon code is valid' })
