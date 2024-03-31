@@ -68,13 +68,12 @@ const deleteCoupon = asyncHandler(async (req, res, next) => {
 })
 
 const applyCoupon = asyncHandler(async (req, res) => {
-  // const { _id } = req.user
   const { code } = req.body
   if (!code) {
     throw new Error('Coupon code is required')
   }
-  // const user = await User.findOne({ _id })
-  const foundCoupon = await Coupon.findOne({ code }) // Rename variable to avoid conflict
+
+  const foundCoupon = await Coupon.findOne({ code })
 
   if (!foundCoupon) {
     throw new Error('Invalid coupon code')
@@ -90,7 +89,10 @@ const applyCoupon = asyncHandler(async (req, res) => {
   ) {
     throw new Error('This coupon is not valid at the moment')
   }
-  res.status(200).json({ message: 'Coupon code is valid' })
+
+  res
+    .status(200)
+    .json({ message: 'Coupon code is valid', percent: foundCoupon.percent })
 })
 
 export { createCoupon, getAllCoupons, updateCoupon, deleteCoupon, applyCoupon }
