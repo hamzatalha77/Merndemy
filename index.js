@@ -62,6 +62,8 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT || 5001
 
+// this is for dynamic port
+
 // app.listen(
 //   PORT,
 //   console.log(
