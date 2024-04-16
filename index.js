@@ -28,13 +28,13 @@ app.use(express.json())
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
-// app.use(
-//   cors({
-//     origin: ['https://merndemy-backend.vercel.app'],
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-//     credentials: true
-//   })
-// )
+app.use(
+  cors({
+    origin: ['https://merndemy-backend.vercel.app'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    credentials: true
+  })
+)
 app.use(cors())
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('dev'))
