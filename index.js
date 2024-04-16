@@ -70,7 +70,7 @@ const PORT = process.env.PORT || 5001
 //     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
 //   )
 // )
-
+// this is socket.io
 io.on('connection', (socket) => {
   console.log('New client connected')
 
